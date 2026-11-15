@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AGROX – Smart Farming from Space</title>
+<style>
+:root{color-scheme:dark;--bg:#07120d;--card:rgba(17,33,26,.74);--in:rgba(5,13,9,.65);--tx:#e8f3ec;--mut:#9db4a6;--ac:#4cc58a;--ac2:#6aa9ec;--or:#f0913a;--bd:rgba(120,190,150,.2);--hi:rgba(76,197,138,.15);--warn:rgba(240,200,80,.09);--warnb:rgba(240,200,80,.4);--star:1;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){color-scheme:light;--bg:#eaf3ee;--card:rgba(255,255,255,.88);--in:#f3f8f5;--tx:#14261c;--mut:#566a5e;--ac:#1f7a4d;--ac2:#2b6cb0;--or:#d9731a;--bd:#cfdcd4;--hi:rgba(31,122,77,.12);--warn:#fff4d6;--warnb:#e6c46a;--star:0}}
+:root[data-theme="light"]{color-scheme:light;--bg:#eaf3ee;--card:rgba(255,255,255,.88);--in:#f3f8f5;--tx:#14261c;--mut:#566a5e;--ac:#1f7a4d;--ac2:#2b6cb0;--or:#d9731a;--bd:#cfdcd4;--hi:rgba(31,122,77,.12);--warn:#fff4d6;--warnb:#e6c46a;--star:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;color:var(--tx);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:radial-gradient(1200px 600px at 80% -10%,rgba(76,197,138,.16),transparent),radial-gradient(900px 500px at -10% 30%,rgba(106,169,236,.12),transparent),var(--bg);min-height:100vh}
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;opacity:var(--star)}
+.wrap{max-width:1040px;margin:auto;padding:0 18px 36px;display:grid;gap:18px}
+.hero{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;padding:34px 0 6px}
+.hero h1{margin:0;font-size:clamp(2rem,6vw,3.2rem);line-height:1.05;letter-spacing:-.02em}
+.hero h1 b{background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--mut);margin:10px 0 14px;max-width:520px}
+.tags span{display:inline-block;margin:0 6px 6px 0;padding:4px 12px;border:1px solid var(--bd);border-radius:99px;font-size:.78rem;color:var(--mut);background:var(--card)}
+.globe{width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#6fd3ff,#1f6fb5 38%,#0b2f57 70%,#04122a);box-shadow:0 0 50px rgba(80,170,255,.4),inset -18px -12px 30px rgba(0,0,0,.55);position:relative;overflow:hidden}
+.globe i{position:absolute;top:0;left:0;height:100%;width:200%;background:radial-gradient(ellipse 14% 22% at 12% 42%,#4cc58a 98%,transparent),radial-gradient(ellipse 10% 16% at 26% 64%,#3a9e6c 98%,transparent),radial-gradient(ellipse 16% 20% at 66% 38%,#4cc58a 98%,transparent),radial-gradient(ellipse 9% 14% at 80% 66%,#3a9e6c 98%,transparent);background-size:50% 100%;background-repeat:repeat-x;opacity:.85;animation:spin 26s linear infinite}
+@keyframes spin{to{transform:translateX(-50%)}}
+#globe{width:260px;height:260px;max-width:100%}@media(max-width:640px){#globe{width:210px;height:210px;margin:auto}}
+.card{background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--bd);border-radius:20px;padding:20px;animation:up .6s both}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+h2{margin:0 0 14px;font-size:1.1rem;display:flex;align-items:center;gap:10px}
+h2 .n{width:26px;height:26px;border-radius:50%;background:var(--ac);color:#04140b;display:grid;place-items:center;font-size:.8rem;font-weight:800}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+label{display:block;font-size:.8rem;color:var(--mut);margin-bottom:5px}
+input,select,button{font:inherit;width:100%;padding:12px;border-radius:12px;border:1px solid var(--bd);background:var(--in);color:var(--tx)}
+button{background:linear-gradient(90deg,var(--ac),#37b57d);color:#04140b;font-weight:800;border:0;cursor:pointer;transition:transform .15s,box-shadow .15s}
+button:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(76,197,138,.35)}button:disabled{opacity:.6}
+#status{margin:12px 0 0;font-size:.85rem;color:var(--mut)}
+.suit{display:grid;grid-template-columns:200px 1fr;gap:20px;align-items:center}
+.ring{text-align:center}.ring b{display:block;font-size:1.15rem}.ring small{color:var(--mut)}
+.fac{display:grid;gap:12px}.fac div{font-size:.88rem}.fac .h{display:flex;justify-content:space-between;font-weight:600}
+.bar{height:7px;background:var(--bd);border-radius:7px;overflow:hidden;margin:4px 0}.bar i{display:block;height:100%;border-radius:7px;transition:width 1s}
+.fac small{color:var(--mut)}
+.alts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px;align-items:center}
+.alts em{font-style:normal;color:var(--mut);font-size:.82rem;margin-right:4px}
+.chip{width:auto;padding:7px 12px;border-radius:99px;background:var(--in);color:var(--tx);border:1px solid var(--bd);font-weight:600;font-size:.82rem}
+.chip.on{border-color:var(--ac);background:var(--hi)}
+.tip{margin-top:14px;padding:12px;border-radius:12px;background:var(--hi);font-size:.88rem}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.stat{background:var(--in);border-radius:14px;padding:12px}.stat b{display:block;font-size:1.45rem}.stat small{color:var(--mut)}.stat u{text-decoration:none;display:block;font-size:.74rem;color:var(--ac)}
+svg{width:100%;height:auto;display:block}svg text{fill:var(--mut);font-size:11px}svg .big{fill:var(--tx);font-weight:800}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:dr 1.6s .2s forwards}@keyframes dr{to{stroke-dashoffset:0}}
+.leg{display:flex;gap:16px;font-size:.78rem;color:var(--mut);margin-top:6px;flex-wrap:wrap}.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+.stages{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+.stg{background:var(--in);border-radius:14px;padding:10px 12px;border-left:3px solid var(--ac);font-size:.82rem}.stg b{display:block;font-size:.92rem}.stg small{color:var(--mut)}
+.wb{margin-top:16px;display:grid;gap:8px;font-size:.85rem}.wb .bar{height:12px}
+.crew{display:inline-block;margin-bottom:12px;padding:6px 14px;border-radius:99px;font-size:.8rem;color:var(--mut);border:1px solid var(--bd);background:linear-gradient(90deg,var(--hi),transparent)}.crew b{color:var(--ac)}
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.mem{display:flex;gap:12px;align-items:center;background:var(--in);border:1px solid var(--bd);border-radius:14px;padding:12px;transition:transform .2s,border-color .2s}.mem:hover{transform:translateY(-3px);border-color:var(--ac)}.av{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:.85rem;color:#04140b;background:linear-gradient(135deg,var(--ac),var(--ac2))}.mem b{display:block;font-size:.92rem}.mem em{display:block;font-style:normal;font-size:.76rem;color:var(--ac)}.mem small{color:var(--mut);font-size:.74rem}
+.tsub{margin:-6px 0 14px;color:var(--mut);font-size:.85rem}
+#cov{margin-top:14px;padding:16px;border-radius:16px;border:1px solid var(--bd);background:linear-gradient(120deg,var(--hi),transparent);animation:up .5s both}#cov[hidden]{display:none}#cov h3{margin:0 0 4px;font-size:1.05rem}#cov p{margin:0 0 12px;color:var(--mut);font-size:.88rem}.road{display:flex;flex-wrap:wrap;gap:8px;font-size:.8rem;font-weight:700;margin-bottom:12px}.road span{padding:4px 12px;border-radius:99px;border:1px dashed var(--bd);color:var(--mut)}.road .now{border:1px solid var(--ac);color:var(--ac);background:var(--hi)}.try{width:auto;padding:6px 12px;border-radius:99px;background:var(--in);color:var(--tx);border:1px solid var(--bd);font-size:.8rem;font-weight:600;margin:0 6px 6px 0}
+.note{background:var(--warn);border:1px solid var(--warnb);border-radius:14px;padding:14px;font-size:.85rem}
+footer{max-width:1040px;margin:auto;padding:0 18px 34px;color:var(--mut);font-size:.8rem;text-align:center}
+@media(max-width:640px){.hero{grid-template-columns:1fr}.globe{display:none}.suit{grid-template-columns:1fr}.ring svg{max-width:200px;margin:auto}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.draw{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<div class="wrap">
+<header class="hero">
+<div>
+<div class="crew">🌌 Built by Team <b>Galaxy Caretaker</b> · NASA Space Apps Challenge 2026</div>
+<h1>AGRO<b>X</b></h1>
+<p><b>Smart farming, powered by space.</b> AGROX turns NASA Earth-observation data into smarter crop-planning decisions for farmers.</p>
+<div class="tags"><span>🛰️ NASA POWER</span><span>🌾 Crop suitability</span><span>📈 90-day growth estimate</span><span>NASA Space Apps 2026</span></div>
+</div>
+<canvas id="globe" width="520" height="520" aria-hidden="true"></canvas>
+</header>
+
+<section class="card">
+<h2>Enter your field details</h2>
+<div class="form">
+<div><label for="loc">Location (village / town / city)</label><input id="loc" list="pl" value="Coimbatore" autocomplete="off"><datalist id="pl"></datalist></div>
+<div><label for="crop">Crop</label><select id="crop"></select></div>
+<div><label for="ph">Soil pH</label><input id="ph" type="number" step="0.1" min="3" max="10" value="6.5"></div>
+<div><label for="pd">Planting date</label><input id="pd" type="date"></div>
+</div>
+<div class="form" style="margin-top:14px"><button id="go">Analyse</button></div>
+<p id="status"></p>
+<div id="cov" hidden></div>
+</section>
+
+<section class="card"><h2><span class="n">1</span>Crop suitability</h2><div id="s1"></div></section>
+<section class="card"><h2><span class="n">2</span>Recent conditions (last 30 days, NASA POWER)</h2><div id="s2"></div></section>
+<section class="card"><h2><span class="n">3</span>Estimated growth over the next 90 days</h2><div id="s3"></div></section>
+
+<div class="note"><b>Guidance only.</b> Results are estimates from simple agronomic rules and climate data, not guaranteed yield or farming outcomes. NASA POWER gives weather and solar data, not field-level soil or crop measurements; soil pH is your own input. The 90-day outlook uses typical (climatology) weather, not a forecast. Please confirm decisions with your local agricultural officer.</div>
+</div>
+<footer>
+<p id="src"></p>
+<p>AGROX · Team Galaxy Caretaker · Arun Varman · G. Divya · H. Mohamad Faizal · K. Kishore Kumaran · Sai Bavanesh · Mathimeshbala</p>
+</footer>
+
+<script>
+const $=id=>document.getElementById(id),clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmt=d=>d.getDate()+" "+MN[d.getMonth()],addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x},ymd=d=>d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0");
+/* ---- Monthly climatology fallback (SAMPLE values: replace with Arun's NASA POWER data) ---- */
+const AN={
+Coimbatore:{lat:11,lon:76.96,rain:[7,8,22,70,60,35,40,40,60,130,115,40],temp:[24,26,28,29,28,26,25,25,26,26,25,24]},
+Chennai:{lat:13.08,lon:80.27,rain:[24,7,15,25,52,53,83,124,119,267,309,139],temp:[25,26.5,28.5,31,32.5,31.5,30,29.5,29.5,28,26.5,25.5]},
+Madurai:{lat:9.93,lon:78.12,rain:[20,15,20,70,70,40,50,80,110,170,150,70],temp:[26,27.5,30,32,32,31,30,29.5,29.5,28,26.5,25.5]},
+Thanjavur:{lat:10.79,lon:79.14,rain:[30,15,20,40,70,50,60,100,130,230,330,160],temp:[25.5,27,29,31,32,31,30,29.5,29.5,28,26.5,25.5]}};
+const PL=[["Coimbatore",11,76.96],["Chennai",13.08,80.27],["Tambaram",12.92,80.12],["Madurai",9.93,78.12],["Thanjavur",10.79,79.14],["Salem",11.66,78.15],["Tiruchirappalli",10.8,78.69],["Tirunelveli",8.71,77.76],["Erode",11.34,77.72],["Vellore",12.92,79.13],["Tiruppur",11.11,77.34],["Kanchipuram",12.83,79.7]];
+$("pl").innerHTML=PL.map(p=>`<option value="${p[0]}">`).join("");
+/* Crop rules (t: temp °C, w: water need mm per full cycle, ph: optimum, m: usual sowing months 0-11, gdd: heat units to maturity). To be reviewed by Mathimeshbala. */
+const CROPS={
+rice:{n:"Rice",ic:"🌾",tb:10,gdd:2000,cyc:120,t:[22,32],w:[600,1200],ph:[5.5,7],m:[5,6,7,8,9,10],tip:"Needs standing water; rotate with pulses (e.g. black gram) to restore soil nitrogen."},
+ragi:{n:"Finger millet (ragi)",ic:"🌱",tb:10,gdd:1700,cyc:105,t:[20,30],w:[250,500],ph:[5.5,7.5],m:[5,6,7,11,0],tip:"Drought-tolerant and good for low-rainfall windows and light soils."},
+groundnut:{n:"Groundnut",ic:"🥜",tb:10,gdd:1800,cyc:110,t:[22,32],w:[300,600],ph:[5.9,7],m:[5,6,11,0],tip:"Needs well-drained loose soil; a legume that fits well after a cereal crop."},
+maize:{n:"Maize",ic:"🌽",tb:10,gdd:1600,cyc:100,t:[20,32],w:[350,700],ph:[5.8,7],m:[5,6,7,9,10],tip:"Sensitive to water stress at flowering; keep an irrigation backup."},
+cotton:{n:"Cotton",ic:"☁️",tb:15,gdd:2200,cyc:165,t:[21,35],w:[400,800],ph:[6,8],m:[7,8,0,1],tip:"Prefers dry weather near harvest; rotate with cereals to limit pests."}};
+$("crop").innerHTML=Object.entries(CROPS).map(([k,c])=>`<option value="${k}">${c.n}</option>`).join("");
+$("pd").value=new Date().toISOString().slice(0,10);
+/* ---- helpers ---- */
+const dim=(y,m)=>new Date(y,m+1,0).getDate();
+function anchor(lat,lon){let b,bd=1e9;for(const k in AN){const d=(AN[k].lat-lat)**2+(AN[k].lon-lon)**2;if(d<bd){bd=d;b=AN[k]}}return b}
+function climT(a,d){const m=d.getMonth(),pos=m+(d.getDate()-.5)/dim(d.getFullYear(),m)-.5,i=Math.floor(pos),f=pos-i,g=j=>a.temp[((j%12)+12)%12];return g(i)*(1-f)+g(i+1)*f}
+const climR=(a,d)=>a.rain[d.getMonth()]/dim(d.getFullYear(),d.getMonth());
+const fit=(v,r,s)=>v>=r[0]&&v<=r[1]?100:Math.max(0,100-(v<r[0]?r[0]-v:v-r[1])/s*100);
+const col=s=>s>=80?"#4cc58a":s>=65?"#9bd04a":s>=45?"#f0b43a":"#e25d4f";
+const lab=s=>s>=80?"Excellent":s>=65?"Good":s>=45?"Moderate":"Poor";
+async function jf(url){const c=new AbortController(),t=setTimeout(()=>c.abort(),7000);try{const r=await fetch(url,{signal:c.signal});if(!r.ok)throw 0;return await r.json()}finally{clearTimeout(t)}}
+async function geo(q){
+  const l=PL.find(p=>p[0].toLowerCase()===q.toLowerCase())||PL.find(p=>p[0].toLowerCase().startsWith(q.toLowerCase()));
+  if(l)return{name:l[0],lat:l[1],lon:l[2]};
+  try{const r=await jf("https://geocoding-api.open-meteo.com/v1/search?count=1&name="+encodeURIComponent(q));const x=r.results&&r.results[0];if(x)return{name:x.name,lat:x.latitude,lon:x.longitude}}catch(e){}
+  return null}
+async function recent(g,a){
+  const end=addD(new Date(),-3),start=addD(end,-29);
+  try{
+    const r=await jf(`https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M,PRECTOTCORR,RH2M,ALLSKY_SFC_SW_DWN&community=AG&longitude=${g.lon}&latitude=${g.lat}&start=${ymd(start)}&end=${ymd(end)}&format=JSON`);
+    const P=r.properties.parameter,ks=Object.keys(P.T2M),ok=v=>v>-900;
+    return{live:true,su:(r.parameters&&r.parameters.ALLSKY_SFC_SW_DWN&&r.parameters.ALLSKY_SFC_SW_DWN.units)||"MJ/m²/day",days:ks.map(k=>({d:new Date(+k.slice(0,4),+k.slice(4,6)-1,+k.slice(6)),t:ok(P.T2M[k])?P.T2M[k]:20,r:ok(P.PRECTOTCORR[k])?P.PRECTOTCORR[k]:0,h:ok(P.RH2M[k])?P.RH2M[k]:70,s:ok(P.ALLSKY_SFC_SW_DWN[k])?P.ALLSKY_SFC_SW_DWN[k]:18}))}
+  }catch(e){
+    const sr=i=>{const x=Math.sin(i*127.1+g.lat*3.7)*43758.5453;return x-Math.floor(x)};
+    return{live:false,su:"MJ/m²/day",days:Array.from({length:30},(_,i)=>{const d=addD(start,i),mr=climR(a,d);return{d,t:+(climT(a,d)+(sr(i)-.5)*3).toFixed(1),r:sr(i+50)>.72?+(mr*3.6*(.5+sr(i+90))).toFixed(1):0,h:+(62+(climR(a,d)*5)+sr(i+9)*10).toFixed(0)*1,s:+(19-climR(a,d)*.6+sr(i+3)*2).toFixed(1)*1}})}}}
+/* ---- section 1 ---- */
+function suit(k,c,ph,pl){const C=CROPS[k],need=C.w[0]*90/C.cyc,hi=C.w[1]*90/C.cyc,st=fit(c.t,C.t,5),sw=fit(c.r,[need*.8,hi],need),sp=fit(ph,C.ph,1.5),ss=C.m.includes(pl.getMonth())?100:45;
+  return{st,sw,sp,ss,need,hi,score:Math.round(.3*st+.3*sw+.2*sp+.2*ss)}}
+function draw1(k,c,ph,pl){
+  const C=CROPS[k],S=suit(k,c,ph,pl),gap=Math.max(0,Math.round(S.need-c.r)),R=326.7;
+  const row=(h,v,t)=>`<div><div class="h"><span>${h}</span><span style="color:${col(v)}">${Math.round(v)}%</span></div><div class="bar"><i style="width:0" data-w="${v}" class="fi" ></i></div><small>${t}</small></div>`;
+  const mw=C.m.map(i=>MN[i]).join(", ");
+  const phT=ph<C.ph[0]?`Soil is more acidic than ideal (${C.ph[0]}–${C.ph[1]}); a soil test and liming advice can help.`:ph>C.ph[1]?`Soil is more alkaline than ideal (${C.ph[0]}–${C.ph[1]}); organic matter or gypsum may help.`:`Within the ideal ${C.ph[0]}–${C.ph[1]} range.`;
+  const alts=Object.keys(CROPS).map(x=>({x,s:suit(x,c,ph,pl).score})).sort((a,b)=>b.s-a.s);
+  $("s1").innerHTML=`<div class="suit"><div class="ring"><svg viewBox="0 0 140 140"><circle cx="70" cy="70" r="52" fill="none" stroke="var(--bd)" stroke-width="12"/><circle id="rc" cx="70" cy="70" r="52" fill="none" stroke="${col(S.score)}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${R}" stroke-dashoffset="${R}" transform="rotate(-90 70 70)" style="transition:stroke-dashoffset 1.2s"/><text class="big" x="70" y="76" text-anchor="middle" style="font-size:32px">${S.score}</text><text x="70" y="94" text-anchor="middle">out of 100</text></svg><b style="color:${col(S.score)}">${lab(S.score)}</b><small>${C.ic} ${C.n}</small></div>
+  <div class="fac">${row("Temperature",S.st,`${c.t.toFixed(1)} °C expected average; crop prefers ${C.t[0]}–${C.t[1]} °C.`)}${row("Water",S.sw,`~${Math.round(c.r)} mm typical rain in 90 days vs ~${Math.round(S.need)} mm needed. ${gap>0?`Plan about ${gap} mm of irrigation.`:"Rainfall looks sufficient."}`)}${row("Soil pH",S.sp,phT)}${row("Planting timing",S.ss,S.ss==100?"Inside the usual sowing window.":`Outside the usual window (${mw}).`)}</div></div>
+  <div class="alts"><em>Compare crops for these conditions:</em>${alts.map(a=>`<button class="chip ${a.x==k?"on":""}" data-k="${a.x}">${CROPS[a.x].ic} ${CROPS[a.x].n} · ${a.s}</button>`).join("")}</div>
+  <div class="tip">💡 ${C.tip}</div>`;
+  requestAnimationFrame(()=>{$("rc").style.strokeDashoffset=R*(1-S.score/100);document.querySelectorAll(".fi").forEach(e=>{e.style.width=e.dataset.w+"%";e.style.background=col(+e.dataset.w)})});
+  return S}
+/* ---- section 2 ---- */
+function draw2(rec,a,live){
+  const D=rec.days,n=D.length,avg=f=>D.reduce((s,x)=>s+f(x),0)/n,tAvg=avg(x=>x.t),rT=D.reduce((s,x)=>s+x.r,0),nT=avg(x=>climT(a,x.d)),nR=D.reduce((s,x)=>s+climR(a,x.d),0);
+  const dT=tAvg-nT,pR=nR?Math.round(rT/nR*100):0;
+  const W=640,H=230,pl=34,pr=34,pt=12,pb=26,bw=(W-pl-pr)/n,mr=Math.max(10,...D.map(x=>x.r))*1.1,lo=Math.floor(Math.min(...D.map(x=>x.t))-1),hi=Math.ceil(Math.max(...D.map(x=>x.t))+1);
+  const X=i=>pl+i*bw+bw/2,YR=v=>H-pb-v/mr*(H-pt-pb),YT=v=>H-pb-(v-lo)/(hi-lo)*(H-pt-pb);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Daily rainfall and temperature, last 30 days">`;
+  [0,.5,1].forEach(f=>{const y=H-pb-f*(H-pt-pb);s+=`<line x1="${pl}" x2="${W-pr}" y1="${y}" y2="${y}" stroke="var(--bd)"/><text x="2" y="${y+4}">${Math.round(mr/1.1*f)}</text><text x="${W-pr+4}" y="${y+4}">${Math.round(lo+(hi-lo)*f)}</text>`});
+  D.forEach((x,i)=>{const h=H-pb-YR(x.r);s+=`<rect x="${X(i)-bw/2+1}" y="${YR(x.r)}" width="${bw-2}" height="${h}" rx="2" fill="var(--ac2)" opacity=".85"><title>${fmt(x.d)}: ${x.r.toFixed(1)} mm, ${x.t.toFixed(1)} °C</title></rect>`;if(i%5==0)s+=`<text x="${X(i)}" y="${H-8}" text-anchor="middle">${fmt(x.d)}</text>`});
+  s+=`<polyline class="draw" pathLength="1" fill="none" stroke="var(--or)" stroke-width="2.6" stroke-linejoin="round" points="${D.map((x,i)=>X(i)+","+YT(x.t)).join(" ")}"/></svg>`;
+  $("s2").innerHTML=`<div class="stats">
+  <div class="stat"><b>${tAvg.toFixed(1)} °C</b><small>Average temperature</small><u>${dT>=0?"+":""}${dT.toFixed(1)} °C vs normal</u></div>
+  <div class="stat"><b>${rT.toFixed(0)} mm</b><small>Total rainfall</small><u>${pR}% of normal</u></div>
+  <div class="stat"><b>${avg(x=>x.h).toFixed(0)} %</b><small>Relative humidity</small></div>
+  <div class="stat"><b>${avg(x=>x.s).toFixed(1)}</b><small>Solar radiation (${rec.su})</small></div></div>${s}
+  <div class="leg"><span><i style="background:var(--ac2)"></i>Rainfall (mm/day, left axis)</span><span><i style="background:var(--or)"></i>Mean temperature (°C, right axis)</span><span>${fmt(D[0].d)} – ${fmt(D[n-1].d)} ${D[n-1].d.getFullYear()}</span></div>`}
+/* ---- section 3 ---- */
+function draw3(k,a,pl,S,c){
+  const C=CROPS[k];let g=0;const pr=[];
+  for(let d=0;d<300;d++){const t=clamp(climT(a,addD(pl,d)),C.tb,32);g+=t-C.tb;pr.push(Math.min(1,g/C.gdd))}
+  const sg=p=>{const f=x=>1/(1+Math.exp(-9*(x-.5)));return 100*(f(p)-f(0))/(f(1)-f(0))};
+  const TH=[0,.15,.45,.7,.9,1],NM=["Establishment","Vegetative","Flowering","Grain / pod fill","Maturity"];
+  const fd=th=>{const i=pr.findIndex(p=>p>=th-1e-9);return i<0?300:th==0?0:i+1};
+  const W=640,H=250,pl2=36,pr2=10,pt=22,pb=30,X=d=>pl2+d/90*(W-pl2-pr2),Y=v=>H-pb-v/100*(H-pt-pb);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Estimated growth curve"><defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--ac)" stop-opacity=".5"/><stop offset="1" stop-color="var(--ac)" stop-opacity="0"/></linearGradient></defs>`;
+  NM.forEach((nm,i)=>{const a0=fd(TH[i]),a1=Math.min(fd(TH[i+1]),90);if(a0<90){const w=X(a1)-X(a0);s+=`<rect x="${X(a0)}" y="${pt}" width="${w}" height="${H-pt-pb}" fill="${i%2?"var(--hi)":"transparent"}"/>`+(w>46?`<text x="${X(a0)+w/2}" y="${pt-7}" text-anchor="middle" style="font-size:10px">${nm}</text>`:"")}});
+  [0,50,100].forEach(v=>s+=`<line x1="${pl2}" x2="${W-pr2}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--bd)"/><text x="4" y="${Y(v)+4}">${v}</text>`);
+  [0,15,30,45,60,75,90].forEach(d=>s+=`<text x="${X(d)}" y="${H-12}" text-anchor="middle">D${d}</text>`);
+  const pts=Array.from({length:91},(_,d)=>X(d)+","+Y(sg(d?pr[d-1]:0))).join(" ");
+  s+=`<polygon points="${X(0)},${Y(0)} ${pts} ${X(90)},${Y(0)}" fill="url(#gr)"/><polyline class="draw" pathLength="1" fill="none" stroke="var(--ac)" stroke-width="3" stroke-linejoin="round" points="${pts}"/></svg>`;
+  const mat=fd(1),p90=Math.round(pr[89]*100),w=Math.min(100,Math.round(c.r/S.need*100)),gap=Math.max(0,Math.round(S.need-c.r));
+  $("s3").innerHTML=`<div class="stats"><div class="stat"><b>${p90}%</b><small>Crop cycle completed by day 90</small></div><div class="stat"><b>${mat<300?fmt(addD(pl,mat)):"—"}</b><small>Estimated maturity${mat<300?" (day "+mat+")":""}</small></div><div class="stat"><b>${gap} mm</b><small>Irrigation to plan (90 days)</small></div></div>${s}
+  <div class="leg"><span><i style="background:var(--ac)"></i>Growth index (0–100, based on accumulated heat units)</span><span>Planting: ${fmt(pl)} ${pl.getFullYear()}</span></div>
+  <div class="stages">${NM.map((nm,i)=>{const a0=fd(TH[i]),a1=fd(TH[i+1]);return`<div class="stg"><b>${nm}</b><small>${a0>=300?"—":`Day ${a0+1}–${a1>=300?"…":a1}<br>from ${fmt(addD(pl,a0))}`}</small></div>`}).join("")}</div>
+  <div class="wb"><div>💧 Water balance (90 days): typical rain <b>${Math.round(c.r)} mm</b> vs crop need <b>${Math.round(S.need)} mm</b></div><div class="bar"><i style="width:${w}%;background:${col(w)}"></i></div></div>`}
+/* ---- run ---- */
+async function run(){
+  const b=$("go");b.disabled=true;b.textContent="Fetching NASA data…";
+  try{
+    const q=$("loc").value.trim()||"Coimbatore",g=await geo(q);
+    if(!g||!(g.lat>=8&&g.lat<=13.6&&g.lon>=76.4&&g.lon<=80.4)){
+      const e=q.replace(/[&<>"]/g,"");$("status").textContent="";$("cov").hidden=false;
+      $("cov").innerHTML=`<h3>🌾 AGROX is live in Tamil Nadu</h3><p>“${e}” isn’t on our map yet. This beginner-friendly prototype covers selected Tamil Nadu locations — more states and countries are on the way.</p><div class="road"><span class="now">✅ Tamil Nadu</span><span>🔜 India</span><span>🌍 World</span></div>${["Coimbatore","Chennai","Madurai","Thanjavur","Salem","Erode"].map(n=>`<button class="try" data-l="${n}">📍 ${n}</button>`).join("")}`;return}
+    $("cov").hidden=true;
+    const a=anchor(g.lat,g.lon),k=$("crop").value,ph=+$("ph").value||6.5,pl=new Date(($("pd").value||new Date().toISOString().slice(0,10))+"T00:00:00");
+    const rec=await recent(g,a);
+    let ts=0,rs=0;for(let d=0;d<90;d++){const x=addD(pl,d);ts+=climT(a,x);rs+=climR(a,x)}
+    const c={t:ts/90,r:rs},S=draw1(k,c,ph,pl);draw2(rec,a,rec.live);draw3(k,a,pl,S,c);
+    $("status").innerHTML=`📍 ${g.name} (${g.lat.toFixed(2)}°N, ${g.lon.toFixed(2)}°E) · `+(rec.live?`<b style="color:var(--ac)">● Live NASA POWER data</b>`:`<b style="color:#f0b43a">● Demo data</b> (live NASA POWER loads when this page is hosted on your own site)`);
+    $("src").textContent=rec.live?"Recent weather: NASA POWER daily API (T2M, PRECTOTCORR, RH2M, ALLSKY_SFC_SW_DWN, community AG). 90-day outlook: typical monthly climate (sample values until NASA POWER climatology is added).":"Demo mode: all weather values are illustrative samples, not NASA-verified. Replace with NASA POWER data before final submission.";
+  }finally{b.disabled=false;b.textContent="Analyse"}}
+$("go").onclick=run;
+document.addEventListener("click",e=>{const c=e.target.closest(".chip"),t=e.target.closest(".try");if(c){$("crop").value=c.dataset.k;run()}if(t){$("loc").value=t.dataset.l;run()}});
+run();
+/* ---- realistic globe + satellite ---- */
+(()=>{
+const cv=$("globe"),x=cv.getContext("2d"),S=260,R=80,C=S/2,rad=Math.PI/180;x.scale(2,2);
+const pr=a=>{const o=[];for(let i=0;i<a.length;i+=2)o.push([a[i],a[i+1]]);return o};
+const LAND=[
+["#4fa65b",[-168,66,-162,70,-156,71.5,-141,70,-128,70,-115,68,-95,68,-85,70,-82,66,-88,64,-94,60,-93,57,-86,55,-82,52,-79,52,-79,57,-77,62,-72,61,-65,60,-62,57,-56,52,-60,48,-66,50,-64,46,-70,44,-70,42,-74,40,-76,37,-76,35,-81,31,-80,26,-81,25,-83,29,-85,30,-90,30,-94,29.5,-97,26,-97,22,-95,19,-91,19,-90,21,-87,21,-88,16,-84,15.5,-83,11,-80,9,-77.5,8.5,-79,8,-82,8,-86,11,-88,13,-92,14.5,-96,16,-100,17,-105,20,-109,25,-112,29,-115,31,-117,32.5,-120,34.5,-122,37,-124,40,-124,46,-125,49,-130,54,-135,58,-140,60,-148,61,-152,59,-158,57,-163,55,-158,59,-162,62,-165,63]],
+["#e9f2f6",[-73,78,-60,82,-35,83.5,-20,81,-18,76,-22,70,-30,68,-40,65,-44,60,-50,62,-54,67,-58,75,-68,76]],
+["#e9f2f6",[-80,73.5,-72,71.5,-67,68,-62,66.5,-66,63,-75,65,-78,70]],
+["#4fa65b",[-90,76.5,-76,79,-65,82,-80,83,-95,81]],
+["#4fa65b",[-120,72,-105,73,-100,69.5,-115,69]],
+["#4fa65b",[-85,22,-82,23.2,-77,21.5,-74,20,-78,20,-82,22]],
+["#4fa65b",[-77,8,-72,12,-64,10.5,-60,8.5,-52,5,-50,0,-44,-2.5,-35,-5.5,-35,-9,-39,-14,-39,-18,-41,-22.5,-45,-23.5,-48,-26,-49,-29,-53,-33.5,-58,-34.5,-57,-38,-62,-39,-65,-41,-64,-45,-67,-46.5,-66,-50,-69,-52,-68.5,-55,-72,-54,-75,-50,-74,-44,-73.5,-38,-71.5,-30,-70.5,-20,-71,-17,-76,-14,-79,-8,-81,-5,-80,-1,-79,2,-77.5,4,-77.5,7]],
+["#4fa65b",[-6,35.8,-2,35,10,37,11,33,15,32.5,20,31,25,31.5,32,31.3,32.5,29.8,33.5,27.3,35.5,24,37,19,39,16,43,12.5,51,12,51,10,48,5,41,-2,39,-5,40,-11,40.5,-15,35,-20,35,-24,33,-26,32.5,-29,28,-33,24,-34,19,-34.5,18,-31,15,-27,12,-18,13,-12,12,-6,9,-1,9.5,4,7,4.5,4,6.3,-2,5,-8,4.5,-12,7.5,-15,11,-17,14.5,-16.5,19,-16,23,-13,27.5,-10,30,-9.5,32.5]],
+["#4fa65b",[44,-25,47,-25,50,-15,49.5,-12.5,47,-15,44,-19]],
+["#4fa65b",[-9,37,-9,43,-2,43.5,-1.5,46,-4.5,48.5,-1.5,49.5,2,51,4,52,8.5,54,8.5,57.5,10.5,57.5,12,54,18,54.7,20,54.5,21,57,24,57.5,24,59.5,30,60,22,60.5,22,63,25,65,21.5,65.5,17.5,62.5,19,60,16.5,57,13,55.5,11,59,8,58,5,60,5,62,12,66,17,69,25,71,31,70,41,67,34,66,40,64.5,44,66.5,53,68.5,60,69,67,69,70,73,80,73,88,75.5,100,77,112,76,113,74,130,71,140,72.5,150,71,160,69.5,170,70,180,68.5,190,66,187,64,178,62.5,170,60,163,59.5,163,57,156,51,155.5,57,152,59,143,59,137,54.5,141,52,140,48,135,43,131,43,129,41,129.5,36,126.5,34.5,126,38,125,39.5,122,40.5,121,38.5,118,39,119,37,122.5,37,120,35,121,32,122,30,120,26,117,23.5,113,22,110,21,108,21.5,106,19,108,15,109,12,105,9,102,12.5,100,13.5,99.5,10,103,5,104,1.5,101,3,98.5,8,98,13,97,17,94,19,92,22,90,22,87,21,85,19.5,80,15.5,80,10,77.5,8,76,10,73,17,72.5,21,70,21,67,24.5,62,25,57,25.7,56,27,52,27.5,50,30,48,30,48,29,50,26,51.5,24.5,56,26,56.5,24,59.5,22.5,57,19,52,16,45,13,43,13,42.5,16,39,21.5,35,28,34.5,29.5,34,31.3,35.5,34,36,36.5,32,36.2,28,36.6,27,38.5,26,40,24,40.5,23,38,22,36.5,21,38.5,19.5,41,19,42.5,13.5,45.7,12.3,44.5,14,42,16,41.8,18.5,40.2,17,39,16,38,15.7,40,12,41.5,10.5,43,8.8,44.4,7,43.7,3.5,43.2,3,42,0.5,40,-0.5,38.5,-2,36.8,-5.5,36]],
+["#4fa65b",[-5.5,50,1.5,51,1.7,52.8,0,53.5,-1.5,55,-2,57.5,-3.5,58.6,-5,58.5,-6,57,-5,55.5,-3,54.8,-3.2,53.4,-4.5,53,-5,51.7,-3,51.3]],
+["#4fa65b",[-10,52,-6,52,-6,54.5,-8,55,-10,54]],
+["#e9f2f6",[-24,65.5,-22,66.4,-16,66.5,-13.5,65,-18,63.5,-22,63.8]],
+["#4fa65b",[130.5,31,131.5,33.5,135,34,136.8,34.5,140,35,141,38,142,40.5,140,41.5,139.5,38,137,37,135.5,35.7,132,35,130.8,34]],
+["#4fa65b",[140,42,141,45.5,145,44,143,42]],
+["#4fa65b",[80,9.5,81.8,7.5,81,6,80,6.5]],
+["#4fa65b",[95,5.5,98,4,104,-1,106,-4,104,-5.8,101,-3,98,0.5]],
+["#4fa65b",[109,1.5,111,2,114,4.5,117,7,119,5,118,1,116.5,-3,114,-4,111,-3,109,-1]],
+["#4fa65b",[105.5,-6.5,108,-6.5,114.5,-7.7,114,-8.5,106,-7.5]],
+["#4fa65b",[131,-1,135,-3.5,138,-1.5,141,-2.6,146,-5.5,148,-8,150,-10.5,147,-10,143,-9,141,-9,138,-8,137,-5,133,-3.5]],
+["#4fa65b",[120,18.5,122,18.5,122,14,124,12.5,121,13.5,120,15]],
+["#4fa65b",[122,7.5,126,9,126.5,6.5,124,6.5]],
+["#4fa65b",[114,-22,114,-26,115,-34,118,-35,123,-34,130,-31.5,135,-34.8,138.5,-35.5,141,-38,146,-39,150,-37.5,153,-31,153,-26,150,-22,146,-19,145.5,-15,143.5,-14,142.5,-10.8,141.5,-13,141,-17,139,-17.5,136,-15,137,-12,132,-11.5,130,-12.5,127,-14,125,-15,122,-17,121,-19.5,117,-20.7]],
+["#4fa65b",[145,-41,148,-41,147.5,-43.5,146,-43.5]],
+["#4fa65b",[173,-35,175.5,-37,178,-37.7,176,-39.5,175,-41.5,174.5,-39.5,173,-39]],
+["#4fa65b",[172.5,-40.5,174,-41.5,171,-44.5,169,-46.5,166.5,-46,168,-44,171.5,-42]],
+["#d9bd75",[-12,27,-8,31,9,31,20,30.5,30,30,33,26,35,22,33,19,25,15,10,14,-5,15.5,-14,17.5]],
+["#d9bd75",[36,27,42,29,47,29.5,52,24,55,22,52,18,45,16,42,19]],
+["#1a63b3",[28,41.5,28,44,30,46,33,46,35,45,37.5,47,39,47,38,44.5,41.5,41.8,36,41.5,32,41.8]],
+["#1a63b3",[47,45,50,46.5,53,45,53,41,54,37.5,50,37,49,40,47.5,43]]
+].map(([c,a])=>{const p=pr(a),d=[];for(let i=0;i<p.length;i++){const u=p[i],v=p[(i+1)%p.length],n=Math.max(1,Math.ceil(Math.max(Math.abs(v[0]-u[0]),Math.abs(v[1]-u[1]))/4));for(let k=0;k<n;k++)d.push([u[0]+(v[0]-u[0])*k/n,u[1]+(v[1]-u[1])*k/n])}return[c,d]});
+let l0=0,sf=0,cf=1;
+const proj=(lo,la)=>{const l=(lo-l0)*rad,p=la*rad,c=Math.cos(p),cc=sf*Math.sin(p)+cf*c*Math.cos(l);return[c*Math.sin(l),cf*Math.sin(p)-sf*c*Math.cos(l),cc>0]};
+const lim=p=>{const n=Math.hypot(p[0],p[1])||1;return[p[0]/n,p[1]/n]};
+const X=u=>C+u*R,Y=v=>C-v*R;
+function arcTo(a,b){const a1=Math.atan2(-a[1],a[0]),a2=Math.atan2(-b[1],b[0]);let d=a2-a1;while(d>Math.PI)d-=2*Math.PI;while(d<-Math.PI)d+=2*Math.PI;x.arc(C,C,R,a1,a2,d<0)}
+function poly(col,pts){
+  const P=pts.map(q=>proj(q[0],q[1])),n=P.length;
+  if(P.every(p=>p[2])){x.beginPath();P.forEach((p,i)=>i?x.lineTo(X(p[0]),Y(p[1])):x.moveTo(X(p[0]),Y(p[1])));x.closePath();x.fillStyle=col;x.fill();return}
+  let s=-1;for(let i=0;i<n;i++)if(P[i][2]&&!P[(i+n-1)%n][2]){s=i;break}
+  if(s<0)return;
+  x.beginPath();let ex=null,e0=null;
+  for(let k=0;k<n;k++){const p=P[(s+k)%n],q=P[(s+k+n-1)%n];
+    if(p[2]){if(!q[2]){const e=lim(q);if(ex){arcTo(ex,e)}else{e0=e;x.moveTo(X(e[0]),Y(e[1]))}x.lineTo(X(e[0]),Y(e[1]))}x.lineTo(X(p[0]),Y(p[1]))}
+    else if(q[2]){ex=lim(p);x.lineTo(X(ex[0]),Y(ex[1]))}}
+  if(ex&&e0)arcTo(ex,e0);
+  x.closePath();x.fillStyle=col;x.fill()}
+const Ro=R*1.42,inc=63*rad,rho=-24*rad;
+const op=t=>{const a=Ro*Math.cos(t),b=Ro*Math.sin(t)*Math.cos(inc),z=Ro*Math.sin(t)*Math.sin(inc);return[C+a*Math.cos(rho)-b*Math.sin(rho),C-(a*Math.sin(rho)+b*Math.cos(rho)),z]};
+function orbit(front){x.beginPath();for(let t=0;t<6.2832;t+=.06){const a=op(t),b=op(t+.06);if((a[2]+b[2]>=0)==front){x.moveTo(a[0],a[1]);x.lineTo(b[0],b[1])}}x.strokeStyle=front?"rgba(190,225,255,.6)":"rgba(190,225,255,.2)";x.lineWidth=1;x.stroke()}
+function sat(t){const a=op(t),b=op(t+.02),ang=Math.atan2(b[1]-a[1],b[0]-a[0]);x.save();x.translate(a[0],a[1]);x.rotate(ang);x.shadowColor="rgba(160,210,255,.9)";x.shadowBlur=6;
+  x.fillStyle="#2f6fd0";x.strokeStyle="#cfe3ff";x.lineWidth=.6;[[-14,-2.4,10,4.8],[4,-2.4,10,4.8]].forEach(r=>{x.fillRect(...r);x.strokeRect(...r);x.beginPath();x.moveTo(r[0]+r[2]/2,r[1]);x.lineTo(r[0]+r[2]/2,r[1]+r[3]);x.stroke()});
+  x.shadowBlur=0;x.fillStyle="#e3e9f0";x.fillRect(-4,-3.2,8,6.4);x.fillStyle="#f2c14e";x.fillRect(-4,-1,8,2);x.strokeStyle="#e3e9f0";x.beginPath();x.moveTo(0,-3.2);x.lineTo(0,-7);x.stroke();x.fillStyle="#ff6b5a";x.beginPath();x.arc(0,-7.5,1.2,0,6.3);x.fill();x.restore();return a[2]}
+function frame(ms){
+  x.clearRect(0,0,S,S);l0=-20-ms*.012;const f0=22*rad;sf=Math.sin(f0);cf=Math.cos(f0);
+  const th=ms/9000*6.2832,sz=Math.sin(th)*Math.sin(inc);
+  let g=x.createRadialGradient(C,C,R*.95,C,C,R*1.25);g.addColorStop(0,"rgba(110,190,255,.55)");g.addColorStop(1,"rgba(110,190,255,0)");x.fillStyle=g;x.beginPath();x.arc(C,C,R*1.25,0,6.3);x.fill();
+  orbit(false);if(sz<0)sat(th);
+  x.save();x.beginPath();x.arc(C,C,R,0,6.2832);x.clip();
+  g=x.createRadialGradient(C-R*.3,C-R*.35,R*.1,C,C,R);g.addColorStop(0,"#46a8ee");g.addColorStop(.55,"#1565c0");g.addColorStop(1,"#0a2a63");x.fillStyle=g;x.fillRect(0,0,S,S);
+  LAND.forEach(([c,p])=>poly(c,p));
+  g=x.createRadialGradient(C-R*.38,C-R*.42,R*.1,C,C,R);g.addColorStop(0,"rgba(255,255,255,.2)");g.addColorStop(.5,"rgba(0,0,0,0)");g.addColorStop(1,"rgba(0,8,35,.65)");x.fillStyle=g;x.fillRect(0,0,S,S);x.restore();
+  orbit(true);if(sz>=0)sat(th)}
+if(matchMedia("(prefers-reduced-motion:reduce)").matches)frame(2500);else{const lp=t=>{frame(t);requestAnimationFrame(lp)};requestAnimationFrame(lp)}
+})();
+/* ---- starfield ---- */
+(()=>{const cv=$("stars"),x=cv.getContext("2d");let w,h,st=[];const rz=()=>{w=cv.width=innerWidth;h=cv.height=innerHeight;st=Array.from({length:Math.min(140,w/8)},()=>({x:Math.random()*w,y:Math.random()*h,r:Math.random()*1.3+.2,p:Math.random()*6}))};rz();addEventListener("resize",rz);
+const rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const f=t=>{x.clearRect(0,0,w,h);st.forEach(s=>{x.globalAlpha=.35+.65*Math.abs(Math.sin(t/1200+s.p));x.fillStyle="#cfe8ff";x.beginPath();x.arc(s.x,s.y,s.r,0,6.3);x.fill()});if(!rm)requestAnimationFrame(f)};f(0)})();
+</script>
+</body>
+</html>
